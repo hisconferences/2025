@@ -1291,11 +1291,40 @@ section {
     transform: rotate(180deg);
 }
 
-/* Icons styling */
+/* Icons styling - Fixed version */
 .fas, .far {
-    color: #FFFFFF;
+    color: #008251; /* Changed from #FFFFFF to match your theme */
     font-size: 1.2rem;
     min-width: 24px;
+}
+
+/* Exception for icons that should remain white (like in buttons) */
+.btn .fas,
+.btn .far,
+.link-button .fas,
+.link-button .far,
+.download-pdf-btn .fas,
+.download-pdf-btn .far,
+.pdf-controls .fas,
+.pdf-controls .far {
+    color: #FFFFFF; /* Keep white for buttons and controls */
+}
+
+/* Icons in headings should use the heading color */
+.instruction-section h2 .fas,
+.instruction-section h2 .far {
+    color: #008251;
+}
+
+.session-chair-section h2 .fas,
+.session-chair-section h2 .far {
+    color: #2e7d32;
+}
+
+/* Nav tabs icons */
+.nav-tabs .nav-link .fas,
+.nav-tabs .nav-link .far {
+    color: inherit; /* Use the link's color */
 }
 
 /* Links styling */

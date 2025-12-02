@@ -11,6 +11,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="../assets/css/style.css?v=2.0" rel="stylesheet">
     <style>
+        /* Icons styling - Fixed version */
+        .fas, .far {
+            color: #008251;
+            font-size: 1.2rem;
+            min-width: 24px;
+        }
+
+        /* Exception for icons that should remain white (like in buttons) */
+        .btn .fas,
+        .btn .far,
+        .link-button .fas,
+        .link-button .far,
+        .download-pdf-btn .fas,
+        .download-pdf-btn .far,
+        .pdf-controls .fas,
+        .pdf-controls .far {
+            color: #FFFFFF;
+        }
+
+        /* Icons in headings */
+        .instruction-section h2 .fas,
+        .instruction-section h2 .far {
+            color: #008251;
+        }
+
+        .session-chair-section h2 .fas,
+        .session-chair-section h2 .far {
+            color: #2e7d32;
+        }
+
+        /* Nav tabs icons */
+        .nav-tabs .nav-link .fas,
+        .nav-tabs .nav-link .far {
+            color: inherit;
+        }
+        
         .instructions-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -206,11 +242,7 @@
             background-color: #00a566;
             transform: translateY(-2px);
         }
-        .fas, .far {
-    color: #ffffff;
-    font-size: 1.2rem;
-    min-width: 24px;
-}
+        
         
         .tabs-container {
             margin-bottom: 30px;
@@ -221,6 +253,9 @@
             font-weight: 500;
             border: none;
             border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 12px 20px;
         }
         
         .nav-tabs .nav-link.active {
@@ -232,6 +267,21 @@
         
         .nav-tabs .nav-link:hover {
             border-bottom: 3px solid #00a566;
+            background-color: rgba(0, 130, 81, 0.05);
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .tab-content {
@@ -537,6 +587,37 @@
     <script src="../assets/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Fix Tab Switching - Make it smooth and reliable
+            const tabButtons = document.querySelectorAll('#instructionsTabs button[data-bs-toggle="tab"]');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Remove active from all tabs and panes
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-selected', 'false');
+                    });
+                    tabPanes.forEach(pane => {
+                        pane.classList.remove('show', 'active');
+                    });
+                    
+                    // Add active to clicked tab
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+                    
+                    // Show corresponding pane
+                    const targetId = this.getAttribute('data-bs-target');
+                    const targetPane = document.querySelector(targetId);
+                    if (targetPane) {
+                        targetPane.classList.add('show', 'active');
+                    }
+                });
+            });
+            
             // PDF Viewer Controls
             const pdfFrame = document.getElementById('pdf-frame');
             const zoomInBtn = document.getElementById('zoom-in');
@@ -611,10 +692,8 @@
             
             // Download PDF function
             downloadBtn.addEventListener('click', function() {
-                // Change this URL to your actual PDF file
                 const pdfUrl = '../assets/docs/HIS2025-Conference-Program.pdf';
                 
-                // Create a temporary link element
                 const link = document.createElement('a');
                 link.href = pdfUrl;
                 link.download = 'HIS2025-Conference-Program.pdf';
